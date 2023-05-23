@@ -3,6 +3,7 @@ from rest_framework.viewsets import ModelViewSet
 
 from ads.serializers import SelectionSerializer, SelectionCreateSerializer
 from ads.models import Selection
+from ads.permissions import IsOwner
 
 class SelectionViewSet(ModelViewSet):
     queryset = Selection.objects.all()
@@ -10,8 +11,13 @@ class SelectionViewSet(ModelViewSet):
         "create": SelectionCreateSerializer
     }
     default_serializer = SelectionSerializer
-
-    permissions = {"retrieve": [IsAuthenticated], "create": [IsAuthenticated]}
+    permissions = {
+        "retrieve": [IsAuthenticated],
+        "create": [IsAuthenticated],
+        "update": [IsOwner],
+        "destroy": [],
+        "partial_update": []
+    }
     default_permission = [AllowAny]
 
     def get_permissions(self):
