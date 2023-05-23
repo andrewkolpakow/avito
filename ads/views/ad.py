@@ -7,6 +7,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
 from django.shortcuts import get_object_or_404
+from rest_framework import status
+
 from users.models import User
 from django.core.paginator import Paginator
 from rest_framework.viewsets import ModelViewSet
@@ -15,7 +17,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from ads.models import Category, Ad
 from ads.serializers import AdSerializer, AdDetailSerializer, AdListSerializer
-
+from ads.permissions import IsOwner, IsStaff
 
 
 # class AdListCreateView(View):
@@ -111,7 +113,13 @@ class AdViewSet(ModelViewSet):
     serializers = {"list": AdListSerializer, "retrieve": AdDetailSerializer}
     default_serializer = AdSerializer
 
-    permissions = {"retrieve": [IsAuthenticated]}
+    permissions = {
+        "retrieve": [IsAuthenticated],
+        "create": [IsAuthenticated],
+        "update": [IsOwner|IsStaff],
+        "destroy": [IsOwner|IsStaff],
+        "partial_update": [IsOwner|IsStaff]
+    }
     default_permission = [AllowAny]
 
     def get_permissions(self):
@@ -136,7 +144,7 @@ class AdViewSet(ModelViewSet):
 
         price_from = request.GET.get("price_from")
         if price_from and not price_from.isdigit():
-            return Response(data={"message": "price must be int"},status=status.HTTP_400_BAD_REQUEST)
+            return Response(data={"message": "price must be int"}, status=status.HTTP_400_BAD_REQUEST)
         elif price_from:
             self.queryset = self.queryset.filter(price__gte=price_from)
 

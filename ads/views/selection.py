@@ -15,8 +15,8 @@ class SelectionViewSet(ModelViewSet):
         "retrieve": [IsAuthenticated],
         "create": [IsAuthenticated],
         "update": [IsOwner],
-        "destroy": [],
-        "partial_update": []
+        "destroy": [IsOwner],
+        "partial_update": [IsOwner]
     }
     default_permission = [AllowAny]
 
