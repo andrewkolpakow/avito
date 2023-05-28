@@ -74,3 +74,9 @@ class SelectionCreateSerializer(ModelSerializer):
     class Meta:
         model = Selection
         fields = '__all__'
+
+
+class CategorySerializer(ModelSerializer):
+    class Meta:
+        model = Category
+        fields = '__all__'
