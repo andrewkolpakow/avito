@@ -12,15 +12,15 @@ from users.serializers import UserListSerializer, LocationSerializer
 
 class UserAdSerializer(ModelSerializer):
     locations = LocationSerializer(many=True)
-    age_of_born = SerializerMethodField()
-
-    def get_age_of_born(self, obj):
-        return datetime.date.today().year - obj.age
+    # age_of_born = SerializerMethodField()
+    #
+    # def get_age_of_born(self, obj):
+    #     return datetime.date.today().year - obj.age
 
 
     class Meta:
         model = User
-        fields = ["locations", "username", "age_of_born"]
+        fields = ["locations", "username"]
 
 
 class AdSerializer(ModelSerializer):
