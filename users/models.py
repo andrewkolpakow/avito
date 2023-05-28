@@ -16,7 +16,7 @@ class UserRoles(TextChoices):
 
 class User(AbstractUser):
 
-    age = models.PositiveSmallIntegerField()
+    #age = models.PositiveSmallIntegerField() Есть дата рождения
     locations = models.ManyToManyField("Location")
     role = models.CharField(max_length=9, choices=UserRoles.choices, default=UserRoles.MEMBER)
     birth_date = models.DateField(null=True, blank=True, validators=[check_age])
